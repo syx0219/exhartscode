@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 300px;
+            height: 300px;
+            text-align: center;
+            font-size: 30px;
+            color: #ffffff;
+            line-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/vue.js"></script>
+    <div id="app">
+        <div :class="myClass":style="{background:myBackground}">{{myText}}</div>
+        <button v-on:click="myBtn">{{myBtnText}}</button>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                myClass:"box",
+                myText:"hello world",
+                myBackground:"red",
+                myBtnText:"变底色"
+            },
+            methods:{
+                myBtn(){
+                    console.log(11)
+                    this.myBackground = "blue";
+                }
+            }
+        })
+    </script>
+</body>
+</html>
