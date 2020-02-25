@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script src="js/vue.js"></script>
+    <div id="app">
+        <table border="1px" width="400px">
+            <caption>{{title}}</caption>
+            <thead>
+                <tr>
+                    <td v-for = "item in dataName">{{item}}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for = "person in message">
+                    <td>{{person.id}}</td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.sex}}</td>
+                    <td>{{person.home}}</td>
+                    <td>{{person.phone}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                title:"学生信息表",
+                dataName:["学号","姓名","性别","籍贯","联系方式"],
+                message:[{
+                    id:"1",
+                    name:"坤坤",
+                    sex:"男",
+                    home:"湖南",
+                    phone:"130233"
+                },
+                {
+                    id:"2",
+                    name:"弄弄",
+                    sex:"女",
+                    home:"台湾",
+                    phone:"130233"
+                },
+                {
+                    id:"3",
+                    name:"成成",
+                    sex:"男",
+                    home:"青岛",
+                    phone:"130233"
+                },
+                {
+                    id:"4",
+                    name:"豪豪",
+                    sex:"男",
+                    home:"温州",
+                    phone:"130233"
+                },
+                {
+                    id:"5",
+                    name:"君君",
+                    sex:"女",
+                    home:"广州",
+                    phone:"130233"
+                }]
+            }
+        })
+    </script>
+</body>
+</html>
