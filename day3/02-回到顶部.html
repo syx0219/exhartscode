@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    ul,li{
+        list-style: none;
+    }
+    #app{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: blue;
+    }
+    ul{
+        width: 100%;
+        height: 100%;
+        overflow: scroll;
+    }
+    li{
+        height: 300px;
+        background: crimson;
+        margin: 5px 0;
+        border: 5px solid #000000;
+    }
+    .top{
+        width: 50px;
+        height: 50px;
+        background: red;
+        border: 2px solid yellow;
+        border-radius: 50%;
+        color: #ffffff;
+        text-align: center;
+        line-height: 50px;
+        position: fixed;
+        right: 30px;
+        bottom: 50px;
+        z-index: 1;
+    }
+    </style>
+</head>
+<body>
+	<div id="app">
+		<ul @scroll.passive ="scrollFun">
+            <li v-for="(item,index) in 20" :key="index">
+                <span>商品{{item}}</span>
+            </li>
+        </ul>
+        <div class="top" v-show="isTop" @click="toTop">↑</div>
+	</div>
+    <script> 
+    var vm = new Vue({ 
+        el:"#app",
+        data:{
+            isTop:false
+        }, 
+        methods: {
+            scrollFun:function(ev){
+                console.log("执行滚动函数");
+                var top = ev.target.scrollTop;
+                this.target =ev.target;
+                top > 300 ? this.isTop=true: this.isTop= false;
+            },
+            toTop:function(ev){
+                console.log(this.target.scrollTop);
+                this.target.scrollTop = 0
+            }
+        } 
+    })
+</script>
+</body>
+</html>

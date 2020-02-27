@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="checkbox" v-model="checkAll" />全选 
+        <input type="checkbox" v-model="checkReverse" />反选
+        <br/>
+        <h2>我喜欢的运动有：</h2>
+        <ul>
+            <li v-for="(item,index) in favs">
+                <input type="checkbox" :id="item.id" v-model="checkedArr" :value="item"/>
+                <label :for="item.id">{{item.name}}</label> 
+            </li>
+        </ul>
+        {{checkedArr}}
+    </div>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                checkAll:false,//全选
+                checkReverse:false,//反选
+                checkedArr:[],//选中的球类的数组
+                favs:[
+                    {"name":"篮球","id":"lanqiu"},
+                    {"name":"足球","id":"zuqiu"},
+                    {"name":"排球","id":"paiqiu"},
+                    {"name":"羽毛球","id":"yumaoqiu"},
+                    {"name":"乒乓球","id":"pingpangqiu"}
+                ]
+            },
+            watch:{
+                //全选
+                checkAll:function(newValue){
+                    console.log("全选按钮触发了");
+                    console.log(newValue);
+                    if(newValue){//全选按钮选中了
+                        console.log(43);
+                        this.checkedArr = this.favs;
+                    }else{
+                        if(this.checkedArr.length == this.favs.length){
+                            this.checkedArr = [];  
+                        }
+                    }
+                },
+                
+                //反选 1
+                checkReverse:function(){
+                    //选差值
+                    var checkSet = new Set(this.checkedArr);
+                    console.log(checkSet);
+                    //如果下面的所有多选框都勾上时，全选按钮需要 勾上 2
+                    //如果原来选中的是 足球和篮球，这个结果就是 足球和篮球以外的其他球
+                    var test = new Set(this.favs.filter((item)=>{
+                        return !checkSet.has(item)
+                    }));
+                    console.log(test); 
+                    //将 set对象 转为数组
+                    console.log([...test]);//扩展运算符
+                    console.log(Array.from(test));
+                    this.checkedArr = [...test];
+                    
+                    
+                }
+                
+                
+            }
+        })
+    </script>
+</body>
+</html>
