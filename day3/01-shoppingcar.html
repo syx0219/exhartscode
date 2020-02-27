@@ -43,26 +43,27 @@
         <br>
         <h1>购物车</h1>
         <table class="biaodan">
-                <thead>
-                    <tr>
-                        <th v-for="item in list">{{item}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="shop in zaruList">
-                        <td>{{shop.name}}</td>
-                        <td>{{shop.price}}</td>
-                        <td>{{shop.count}}</td>
-                        <td><button>移除购物车</button></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td>总价：</td>
-                        <td colspan="3">{{zongjia}}元</td>
-                    </tr>
-                </tfoot>
-            </table>
+            <thead>
+                <tr>
+                    <th v-for="item in list">{{item}}</th>
+                </tr>
+            </thead>
+            <template></template>
+            <tbody>
+                <tr v-for="items in zaruList">
+                    <td>{{items.name}}</td>
+                    <td>{{items.price}}</td>
+                    <td>{{items.count}}</td>
+                    <td><button @click="delShop">移除购物车</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>总价：</td>
+                    <td colspan="3">{{zongjia}}元</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
     <script>
         var vm = new Vue({
@@ -103,6 +104,15 @@
                 zaruList:[],
                 zongjia:0
             },
+            computed:{
+                allPrie:function(){
+                    var toal =0;
+                    for(var i = 0; i < this.zaruList.length;i++){
+                        toal += this.zaruList.price * this.zaruList.count;
+                    }
+                    return toal;
+                }
+            },
             methods:{
                 //减
                 decrement:function(items){
@@ -114,8 +124,7 @@
                 increment:function(items){
                     items.count++;
                 },
-               add:function(items){
-                   console.log(122);
+               add:function(items){    
                    var good = JSON.parse(JSON.stringify(items));
                    var hasOne = false;
                    if(this.zaruList.length){
@@ -128,12 +137,24 @@
                             break;
                         }
                     }
+                    if(!hasOne){
+                        this.zaruList.push(good);
+                    }
                    }else{
                        console.log("购物车为空")
                        this.zaruList.push(good);
                    }
+               },
+               delShop:function(items){
+                   for(var i = 0; i< this.zaruList.length;i++){
+                       if(items.name == this.zaruList.name){
+                        this.zaruList.splice(i,1);
+                        break;
+                       }
+                   }
                }
             }
+            
         })
     </script>
 </body>
