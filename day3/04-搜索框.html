@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .mytable{width: 400px; border-collapse: collapse;}
+        .mytable tr td,.mytable tr th{border:1px solid green;}
+    </style>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="stu" />
+        <button @click="search">查询</button>
+        <table class="mytable">
+            <tr><th>学号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>籍贯</th>
+            <th>练习方式</th>
+            <th @click="ageSort" >年龄<span v-show="sortType && sortInit">↓</span><span v-show="!sortType && sortInit">↑</span></th></tr>
+            <tr v-for="(item,index) in searchMethod" :key="item.id">
+                <td>{{item.name}}</td>
+                <td>{{item.sex}}</td>
+                <td>{{item.jiguan}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.age}}</td>
+            </tr>
+        
+        </table>
+    </div>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                stu:'',
+                stuList:[
+                    {"id":1,"name":"大春","sex":"男","jiguan":"青海","phone":"13412345678","age":20},
+                    {"id":2,"name":"大熊","sex":"男","jiguan":"青海","phone":"13412345678","age":16},
+                    {"id":3,"name":"小甜甜","sex":"女","jiguan":"青海","phone":"13412345678","age":28},
+                    {"id":4,"name":"小花","sex":"女","jiguan":"青海","phone":"13412345678","age":18},
+                    {"id":5,"name":"山山","sex":"男","jiguan":"青海","phone":"13412345678","age":25}
+                ],
+                sortType:true,
+                sortInit:false,
+                searchMethod:[
+                    {"id":1,"name":"大春","sex":"男","jiguan":"青海","phone":"13412345678","age":20},
+                    {"id":2,"name":"大熊","sex":"男","jiguan":"青海","phone":"13412345678","age":16},
+                    {"id":3,"name":"小甜甜","sex":"女","jiguan":"青海","phone":"13412345678","age":28},
+                    {"id":4,"name":"小花","sex":"女","jiguan":"青海","phone":"13412345678","age":18},
+                    {"id":5,"name":"山山","sex":"男","jiguan":"青海","phone":"13412345678","age":25}
+                ]
+            },
+            computed:{
+                
+            },
+            methods:{
+                search:function(){
+                    this.searchMethod = this.stuList.filter((item)=>{
+                        return item.name.match(this.stu);
+                    }); 
+                },
+                ageSort:function(){
+                    this.sortInit = true;
+                    if(this.sortType){
+                        this.stuList.sort((a,b)=>{
+                            return a.age - b.age;
+                        })
+                    }else{
+                        this.stuList.sort((a,b)=>{
+                            return b.age - a.age;
+                        })
+                    }
+                    //排序的状态需要取反
+                    this.sortType = !this.sortType;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
