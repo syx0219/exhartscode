@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        #app{
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: column;
+        }
+        h1{
+            color: green;
+            margin: 10px;
+            text-align: center;
+        }
+        .box{
+            width: 100%;
+        }
+        .box ul{
+
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+        }
+        .box li{
+            width: 100px;
+            height: 200px;
+            margin: 5px;
+        }
+        img{
+            width: 100px;
+            height: 150px;
+            border-radius: 10%;
+        }
+        span{
+            display: inline-block;
+            width: 100px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <link rel="stylesheet" href="../../Swiper-3.4.2/dist/css/swiper.min.css">
+</head>
+<body>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <script src="../../Swiper-3.4.2/dist/js/swiper.min.js"></script>
+    <div id="app">
+        <my-header></my-header>
+        <div class="box">
+            <h3>近期值得看的国产剧</h3>
+            <my-content :chinese="guochanList"></my-content>
+        </div>
+        <div class="box">
+            <h3>近期值得看的综艺节目</h3>
+            <my-content :chinese="zongyiList"></my-content>
+        </div>
+        <div class="box">
+            <h3>近期值得看的英美剧</h3>
+            <my-content :chinese="yingmeiList"></my-content>
+        </div>
+        <my-footer></my-footer>
+    </div>
+    <script>
+        //头部
+        var myHeader = {
+            template:`<h1>豆瓣</h1>`
+        }
+        var myitem = {
+            props:['i'],
+            template:`<li>
+                        <div>
+                            <img :src="i.cover.url">
+                            <span>{{i.title}}</span>
+                        </div>
+                    </li>`
+        }
+        //内容1
+        var myContent = {
+            props:['chinese'],
+            created:function(){
+                console.log(this.chinese)
+            },
+            template:`<div class="swiper-container">
+                    <ul class="swiper-wrapper">
+                        <myitem class="swiper-slide" v-for="item in chinese" :i="item"></myitem>
+                    </ul>
+            </div>`,
+            components:{
+                myitem
+            }
+        }
+        //尾部
+        var myFooter = {
+            template:`<div class="myFooter">版权：© 归web21班所有</div>`
+        }
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                guochanList:[],
+                zongyiList:[],
+                yingmeiList:[]
+            },
+            components:{
+                myHeader,
+                myContent,
+                myFooter
+            },
+            mounted:function(){
+                //国产剧
+                axios.get('../js/dianshiju.json').then((data)=>{
+                    console.log(data);
+                    this.guochanList = data.data.subject_collection_items;
+                }).catch((error)=>{
+                    console.log(error);
+                });
+                //综艺
+                axios.get('../js/zongyi.json').then((data)=>{
+                    console.log(data);
+                     this.zongyiList = data.data.subject_collection_items;
+                }).catch((error)=>{
+                    console.log(error);
+                });
+                //英美剧
+                axios.get('../js/yingmei.json').then((data)=>{
+                    console.log(data);
+                     this.yingmeiList = data.data.subject_collection_items;
+                }).catch((error)=>{
+                    console.log(error);
+                });
+                var mySwiper = new Swiper('.swiper-container',{
+                    slidesPerView : 3,
+                    slidesPerGroup : 3,
+                })
+            }
+        })
+    </script>
+</body>
+</html>
