@@ -60,18 +60,9 @@
     <script src="../../Swiper-3.4.2/dist/js/swiper.min.js"></script>
     <div id="app">
         <my-header></my-header>
-        <div class="box">
-            <h3>近期值得看的国产剧</h3>
-            <my-content :chinese="guochanList"></my-content>
-        </div>
-        <div class="box">
-            <h3>近期值得看的综艺节目</h3>
-            <my-content :chinese="zongyiList"></my-content>
-        </div>
-        <div class="box">
-            <h3>近期值得看的英美剧</h3>
-            <my-content :chinese="yingmeiList"></my-content>
-        </div>
+        <my-content text="国产剧" :chinese="guochanList" ></my-content>
+        <my-content text="综艺节目" :chinese="zongyiList"></my-content>
+        <my-content text="英美剧" :chinese="yingmeiList"></my-content>
         <my-footer></my-footer>
     </div>
     <script>
@@ -90,14 +81,17 @@
         }
         //内容1
         var myContent = {
-            props:['chinese'],
+            props:['text','chinese'],
             created:function(){
                 console.log(this.chinese)
             },
-            template:`<div class="swiper-container">
-                    <ul class="swiper-wrapper">
-                        <myitem class="swiper-slide" v-for="item in chinese" :i="item"></myitem>
-                    </ul>
+            template:`<div class="box">
+                    <h3>近期值得看的{{text}}</h3>
+                    <div class="swiper-container">
+                        <ul class="swiper-wrapper">
+                            <myitem class="swiper-slide" v-for="item in chinese" :i="item"></myitem>
+                        </ul>
+                    </div>
             </div>`,
             components:{
                 myitem
