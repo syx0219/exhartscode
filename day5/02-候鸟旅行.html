@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../js/swiper.min.css">
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <link rel="stylesheet" href="icon/iconfont.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        #app{
+            width: 100%;
+            /* height: 1000vh; */
+            background: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+        }
+        .warp{
+            width: 100%;
+            flex: 1;
+        }
+        .warp .header{
+            width: 100%;
+            height: 187px;
+            position: relative;
+        }
+        .swiper-wrapper{
+            width: 100%;
+            height: 187px;
+        }
+        .swiper-slide img{
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            border: none;
+        }
+        .swiper-pagination{
+            z-index: 900;
+        }
+        .search{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            padding: 10px;
+            background:rgba(242,242,242,.95) url("../img/icon_list.png") no-repeat -96px -239px;
+            position: fixed;
+            left: 15px;
+            top: 15px;
+            z-index: 10;
+        }
+        .nav ul{
+            width: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+        }
+        .nav ul li{
+            width: 50px;
+            padding: 15px;
+        }
+        .nav ul li .iconfont{
+            font-size: 30px;
+            color: orange;
+        }
+        .nav ul li dt{
+            color: orange;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .main{
+            width: 100%;
+            margin-top: 10px;
+            background: #ffffff;
+        }
+        .tuijian{
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #cccccc;
+            font-size: 20px;
+            text-align: center;
+            line-height: 50px;
+            color: #cccccc;
+        }
+        .tuijian span{
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: url("../img/icon_list.png") no-repeat -50px -50px;
+        }
+        .main .list{
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            padding: 10px;
+            border-bottom:1px dashed #b9b9b9;
+        }
+        .list .pic{
+            width: 40%;
+            position: relative;
+        }
+        .list .pic img{
+            display: inline-block;
+            width: 146px;
+            height: 78px;
+            border: none;
+        }
+        .list .pic i{
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            bottom: 9px;
+            right: 29px;
+            color: #ffffff;
+        }
+        .list .pic span{
+            position: absolute;
+            bottom: 18px;
+            right: 10px;
+            color: #ffffff;
+            font-size: 12px;
+        }
+        .msg{
+            width: 60%;
+            margin:0 10px;
+        }
+        .list .msg .text{
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .ress{
+            display: inline-block;
+            background: #e9e9e9;
+            border-radius: 4px;
+            color: #484848;
+            font-size: 12px;
+            padding: 3px;
+        }
+        .timemoney{
+            display: flex;
+            font-size: 13px;
+            color: #cccccc;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+        .zhaomu{
+            width: 100%;
+            margin-top: 10px;
+            background: #ffffff;
+            padding: 10px 0px 25px 0px;
+        }
+        .zhaomu .title{
+            width: 90%;
+            margin: 5px auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .zhaomu .title .right{
+            margin: auto 0;
+        }
+        .zhaomu .title .right span{
+            font: 20px;
+            font-weight: bolder;
+        }
+        .zhaobanner{
+            width: 90%;
+            margin: 10px auto;
+            border: 1px solid red;
+        }
+        .zhaobanner ul{
+            display: flex;
+            flex-direction: row;
+            height: 250px;
+        }
+        .zhaobanner ul li{
+            margin: 0px 10px;
+        }
+        .zhaobanner ul li img{
+            height: 178px;
+        }
+        .zhaobanner ul li .zhaomu_title{
+            font-size: 12px;
+        }
+        .zhaobanner ul li .zhaomu_title .zhaomu_country{
+            display: inline-block;
+            background: #e9e9e9;
+            border-radius: 4px;
+            color: #484848;
+            padding: 3px;
+        }
+        .zhaomu .care{
+            font-size: 12px;
+        }
+        .zhaomu .care em{
+            font-style: normal;
+        }
+        .youlike{
+            width: 100%;
+            margin: 10px 0;
+            background: #ffffff;
+        }
+        .youlike .like_con{
+            width: 90%;
+            margin: 10px auto;
+            flex-basis: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex-flow: row wrap;
+        }
+        .youlike .like_item{
+            width: 47%;
+            box-shadow: 0.4rem 0.4rem 0 #f2f2f2;
+            border: 1px solid #f2f2f2;
+            margin: 0.35rem 0;
+        }
+        .youlike .like_item .like_img{
+            height: 80px;
+            position: relative;
+        }
+        .youlike .like_item .like_img img{
+            height: 100%;
+        }
+        .like_item .like_img i{
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            bottom: -1px;
+            right: 30px;
+            color: #ffffff;
+        }
+        .like_item .like_img span{
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+            color: #ffffff;
+            font-size: 12px;
+        }
+        .like_item h2{
+            text-align: right;
+            font-size: 12px !important;
+            padding: 0.066rem 0;
+            font-weight: normal;
+        }
+        .footer{
+            width: 100%;
+            height: 50px;
+            background: #ffffff;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            padding: 10px 0;
+        }
+        .footer ul{
+            display: flex;
+            justify-content: space-around;
+        }
+        .footer li dl dd{
+            width: 30px;
+            height: 30px;
+        }
+        .footer li dl .first{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+        }
+        .footer li dl .find{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -30px -34px;
+        }
+        .footer li dl .dingzhi{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -63px 0px;
+        }
+        .footer li dl .mudi{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -90px -34px;
+        }
+        .footer li dl .mine{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -125px -34px;
+        }
+    </style>
+</head>
+<body>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <script src="../js/swiper.min.js"></script>
+    <div id="app">
+        <div class="warp">
+            <div class="header">
+                <myheader  class="swiper-container" :banner="bannerList">
+                    <div class="swiper-pagination"></div>
+                </myheader>
+                <div class="search"></div>
+            </div>
+            <mynav></mynav>
+            <myrecommed class="main" :tuijian="recommendList">
+                <p class="tuijian">推荐<span></span></p>
+            </myrecommed>
+            <myactivities class="zhaomu" :zhaomu="activityList"></myactivities>
+            <mylike class="youlike" :like="likeList">
+                <p class="tuijian">猜你喜欢<span></span></p>
+            </mylike>
+        </div>
+        <myfooter></myfooter>
+    </div>
+    
+    <script>
+        //广告图轮播
+        var mybanner = {
+            props:['i'],
+            template:`<div>
+                <img :src="i.photoUrl">
+            </div>`
+        }
+        //头部
+        var myheader = {
+            props:['banner'],
+            template:`<div>
+               <div class="swiper-wrapper">
+                    <mybanner  class="swiper-slide" v-for="item in banner" :i="item"></mybanner>
+               </div>
+               <slot></slot>
+            </div>`,
+            components:{
+                mybanner
+            }
+        }
+        //导航
+        var mynav = {
+            template:`<div class="nav">
+                <ul>
+                    <li>
+                        <dl>
+                            <dd><i class="iconfont icon-kafei"></i></dd>
+                            <dt>省心</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd><i class="iconfont icon-iconset0219"></i></dd>
+                            <dt>品质</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd><i class="iconfont icon-yaochi"></i></dd>
+                            <dt>私密</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd><i class="iconfont icon-vip"></i></dd>
+                            <dt>专享</dt>
+                        </dl>
+                    </li>
+                </ul>
+            </div>`
+        }
+        //推荐子组件
+        var recomzi = {
+            props:['items'],
+            template:`<div class="list">
+                <div class="pic">
+                    <img :src="items.proPicUrl">
+                    <i class="iconfont icon-aixin"></i>               
+                    <span>{{items.collectionNum}}</span>
+                </div>
+                <div class="msg">
+                    <p class="text">{{items.proTitle}}</p>
+                    <div class="ress">
+                        <i class="iconfont icon-icon--"></i>
+                        <span class="address">{{items.country}}</span>
+                    </div>
+                    <div class="timemoney">
+                        <p>
+                            <i class="iconfont icon-shijian"></i>
+                            <span>{{items.routingDat}}天{{items.routingNigth}}晚</span>
+                        </p>
+                        <p>
+                            <i class="iconfont icon-jinqian"></i>
+                            <span>{{items.amount}}元起</span>
+                        </p>
+                    </div>
+                </div>
+        </div>`
+        }
+        //推荐
+        var myrecommed = {
+            props:['tuijian'],
+            template:`<div>
+                <slot></slot>
+                <recomzi v-for="item in tuijian" :items="item"></recomzi>
+            </div>`,
+            components:{
+                recomzi
+            }
+        } 
+        //招募头部
+        var zhoamuhead = {
+            props:['sum'],
+            template:`<div>
+                <div class="title_text">
+                    <h1>招募活动</h1>
+                    <p>旅途中，邂逅TA，邂逅世界的美</p>
+                </div>
+                <div class="right">
+                    <span class="swiper-pagination"></span>/<span>{{sum}}</span>
+                </div>
+            </div>`
+        }
+        //招募广告图
+        var zhaomubanner = {
+            props:['i'],
+            template:`<li>
+                <img :src="i.pro_pic_url">
+                <div class="zhaomu_title">
+                    <span>{{i.pro_title}}</span>
+                    <div class="zhaomu_country">
+                        <i class="iconfont icon-icon--"></i>
+                        <span>{{i.country}}</span>
+                    </div>
+                </div>
+                <div class="timemoney">    
+                    <p>
+                        <i class="iconfont icon-shijian"></i>
+                        <span>{{i.routing_data}}天{{i.routing_nigth}}晚</span>
+                    </p>
+                    <p>
+                        <i class="iconfont icon-jinqian"></i>
+                        <span>{{i.amount}}元起</span>
+                    </p>
+                </div>
+            </li>`
+        }
+        //招募活动
+        var myactivities = {
+            props:['zhaomu'],
+            template:`<div>
+                <zhoamuhead class="title" :sum=zhaomu.length></zhoamuhead>
+                <div class="zhaobanner swiper-container">
+                    <ul class="swiper-wrapper">
+                        <zhaomubanner class="swiper-slide" v-for="item in zhaomu" :i = item></zhaomubanner>
+                    </ul>
+                </div>
+                <div class="care">
+                    <span>
+                        <i class="iconfont icon-duihaocheckmark17"></i>  
+                        <em>不用懂外语</em>                      
+                    </span>
+                    <span>
+                        <i class="iconfont icon-duihaocheckmark17"></i>  
+                        <em>不用懂攻略</em>                      
+                    </span>
+                    <span>
+                        <i class="iconfont icon-duihaocheckmark17"></i>  
+                        <em>没有购物坑</em>                      
+                    </span>
+                    <span>
+                        <i class="iconfont icon-duihaocheckmark17"></i>  
+                        <em>不用折腾自己</em>                      
+                    </span>
+                </div>
+            </div>`,
+            components:{
+                zhoamuhead,
+                zhaomubanner
+            }
+        }
+        //猜你喜欢的子组件
+        var youlike = {
+            props:['i'],
+            template:`<div>
+                <div class="like_img">
+                    <img :src="i.proPicUrl">
+                    <i class="iconfont icon-aixin"></i>               
+                    <span>{{i.collectionNum}}</span>
+                </div>
+                <h2>{{i.proTitle}}</h2>
+                <div class="ress">
+                    <i class="iconfont icon-icon--"></i>
+                    <span>{{i.country}}</span>
+                </div>
+                <div class="timemoney">    
+                    <p>
+                        <i class="iconfont icon-shijian"></i>
+                        <span>{{i.routing_data}}天{{i.routing_nigth}}晚</span>
+                    </p>
+                    <p>
+                        <i class="iconfont icon-jinqian"></i>
+                        <span>{{i.amount}}元起</span>
+                    </p>
+                </div>
+            </div>`
+        }
+        //猜你喜欢
+        var mylike = {
+            props:['like'],
+            template:`<div>
+                <slot></slot>
+                <div class="like_con">
+                    <youlike class="like_item" v-for="item in like" :i = item></youlike>
+                </div>
+            </div>`,
+            components:{
+                youlike
+            }
+        }
+        //页脚
+        var myfooter = {
+            props:[''],
+            template:`<div class="footer">
+                <ul>
+                    <li>
+                        <dl>
+                            <dd class="first"></dd>
+                            <dt>首页</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd class="find"></dd>
+                            <dt>发现</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd class="dingzhi"></dd>
+                            <dt>定制行</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd class="mudi"></dd>
+                            <dt>目的地</dt>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dd class="mine"></dd>
+                            <dt>我的</dt>
+                        </dl>
+                    </li>
+                </ul>
+            </div>`
+        }
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                bannerList:[],
+                recommendList:[],
+                activityList:[],
+                likeList:[]
+            },
+            mounted:function(){
+                //广告图轮播
+                axios.get('json/lunbo.json').then((data)=>{
+                    // console.log(data);
+                    this.bannerList = data.data;
+                    // console.log(this.bannerList);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+                //推荐
+                axios.get('json/recommend.json').then((data)=>{
+                    // console.log(data);
+                    this.recommendList = data.data;
+                    // console.log(this.recommendList);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+                //招募活动
+                axios.get('json/zhaomuhuodong.json').then((data)=>{
+                    // console.log(data);
+                    this.activityList = data.data.matchedProducts;
+                    // console.log(this.activityList);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+                axios.get('json/youlike.json').then((data)=>{
+                    // console.log(data);
+                    this.likeList = data.data;
+                    console.log(this.likeList);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+                var mySwiper = new Swiper('.swiper-container',{
+                    pagination : '.swiper-pagination',
+                    paginationType : 'fraction',
+                    autoplay : true,
+                    loop : true
+                })
+            },
+            components:{
+                myheader,
+                mynav,
+                myrecommed,
+                myactivities,
+                mylike,
+                myfooter
+            },
+        })
+    </script>
+</body>
+</html>
