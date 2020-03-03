@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .biaodan{
+            width: 600px;
+            height: 300px;
+            border: 1px solid #000000;
+            text-align: center;
+        }
+        td,th{
+            border: 1px solid #000000;
+        }
+    </style>
+</head>
+<body>
+    <script src="../js/vue.js"></script>
+    <div id="app">
+        <h1>商品列表</h1>
+        <table class="biaodan">
+            <thead>
+                <tr>
+                    <th v-for="item in list">{{item}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(items,index) in shoppingList" :key="items.index">
+                    <td>{{items.name}}</td>
+                    <td>{{items.price}}</td>
+                    <td>
+                        <button @click="decrement(items)">-</button>
+                        {{items.count}}
+                        <button @click="increment(items)">+</button>
+                    </td>
+                    <td><button @click="add(items)">加入购物车</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h1>购物车</h1>
+        <table class="biaodan">
+            <thead>
+                <tr>
+                    <th v-for="item in list">{{item}}</th>
+                </tr>
+            </thead>
+            <template></template>
+            <tbody>
+                <tr v-for="(items,index) in zaruList">
+                    <td>{{items.name}}</td>
+                    <td>{{items.price}}</td>
+                    <td>{{items.count}}</td>
+                    <td><button @click="deleteGood(items)">移除购物车</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>总价：</td>
+                    <td colspan="3">{{zongjia}}元</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <script>
+        Vue.mixin({
+            methods:{
+                delShow:function(arr,index){
+                   arr.splice(index,1);
+                   this.$message({
+                       message:'恭喜你删除成功',
+                       type:'success',
+                       duration:1000
+                   })
+               }
+            }
+        }) 
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                list:["商品名","商品价格","商品数量","操作"],
+                shoppingList:[{
+                        id:"1",
+                        name:"iPhone",
+                        price:10000,
+                        count:1,
+                    },
+                    {
+                        id:"2",
+                        name:"小米",
+                        price:1500,
+                        count:1,
+                    },
+                    {
+                        id:"3",
+                        name:"华为",
+                        price:3500,
+                        count:1,
+                    },
+                    {
+                        id:"4",
+                        name:"vivo",
+                        price:1800,
+                        count:1,
+                    },
+                    {
+                        id:"5",
+                        name:"OPPO Find X",
+                        price:3000,
+                        count:1,
+                    }
+                ],
+                zaruList:[],
+                zongjia:0
+            },
+            computed:{
+                allPrie:function(){
+                    var toal =0;
+                    for(var i = 0; i < this.zaruList.length;i++){
+                        toal += this.zaruList.price * this.zaruList.count;
+                    }
+                    return toal;
+                }
+            },
+            methods:{
+                //减
+                decrement:function(items){
+                    if(items.count >=1){
+                        items.count--;
+                    }
+                },
+                //加
+                increment:function(items){
+                    items.count++;
+                },
+               add:function(items){    
+                   var good = JSON.parse(JSON.stringify(items));
+                   var hasOne = false;
+                   if(this.zaruList.length){
+                    for(var i =0; i< this.zaruList.length;i++){
+                        if(good.name != this.zaruList[i].name){
+                            hasOne =false;
+                        }else{
+                            hasOne = true;
+                            this.zaruList[i].count += good.count;
+                            break;
+                        }
+                    }
+                    if(!hasOne){
+                        this.zaruList.push(good);
+                    }
+                   }else{
+                       console.log("购物车为空")
+                       this.zaruList.push(good);
+                   }
+               },
+               deleteGood:function(items){
+                   for(var i = 0; i< this.zaruList.length;i++){
+                       if(items.name == this.zaruList.name){
+                        // this.zaruList.splice(i,1);
+                        this.delShow(this.zaruList,1)
+                        break;
+                       }
+                   }
+               }
+            }
+            
+        })
+    </script    
+</body>
+</html>

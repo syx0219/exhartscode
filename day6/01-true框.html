@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style type="text/css">
+        .myDialog{
+            position: fixed; top:0;left:0;right:0;bottom:0;background: rgba(0,0,0,0.5);
+        }
+        #dialogMain{
+            margin: 0 auto; height: 40%; background: #fff;min-height: 300px; margin-top: 100px;
+            padding:16px;display: flex; flex-direction: column;
+        }
+        #dialogHeader{
+            display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;
+            height:50px; font-size: 20px; font-weight: bold;
+        }	
+        #dialogContent{background: lightgoldenrodyellow; flex:1; margin-bottom: 10px;}
+        #dialogFooter{height:50px;line-height: 50px; }
+        #dialogFooter span{display: flex; justify-content: space-around;height:50px;line-height: 50px;}
+        .btn{width: 80px; height: 40px; border:0; border-radius: 5px; color:#fff;}
+        .primary{background: skyblue;}
+        .danger{background: orangered;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <base-dialog width="30%" title="我的标题" :visible.sync="dialogVisible">
+            <span>我是模态框的主体内容</span>
+            <span slot="footer">
+                <button class="btn danger" @click="dialogVisible=false">取消</button>
+                <button class="btn primary" @click="dialogVisible=false">确定</button>
+            </span>
+        </base-dialog>
+        <button @click="showM">显示模态框</button>
+    </div>
+    
+    <!--模板-->
+    <script type="text/template" id="myDialog">
+        <div class="myDialog" v-if="visible">
+            <div id="dialogMain" :style="{'width':width}" @click.stop="hiddenM">
+                <div id="dialogHeader">
+                    <span>{{title}}</span>
+                    <span @click="hiddenM">×</span>
+                </div>
+                <div id="dialogContent">
+                    <slot></slot>
+                </div>
+                <div id="dialogFooter">
+                    <slot name="footer"></slot>
+                </div>
+            </div>
+        </div>
+    </script>
+    
+    <script type="text/javascript">
+        //1.创建模态框组件
+        Vue.component('base-dialog',{
+            props:['width','title','visible'],
+            template:'#myDialog',
+            methods:{
+                hiddenM:function(){
+                    //将子组件的模态框的状态值传递给 父组件
+                    this.$emit('update:visible');
+                }
+            }
+        });
+        /***************************************************/
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                dialogVisible:false
+            },
+            methods:{
+                showM:function(){
+                    this.dialogVisible =true;
+                }
+            }
+            
+        })
+    </script>
+</body>
+</html>
