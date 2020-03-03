@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>保留小数后两位：{{num|xiaoshu}}</p>
+    </div>
+    <script>
+        Vue.filter('xiaoshu',function(val){
+                    val = val.toString().replace(/\$|\,/g,'');
+                    if(isNaN(val)){
+                        val ="0";
+                    }
+                    let sign = (val == (val = Math.abs(val)));
+                    val =Math.floor(val*100+0.50000000001);
+                    let cents =val%100;
+                    val = Math.floor(val/100).toString();
+                    if(cents<10){
+                        cents = "0"+cents
+                    }
+                    for(var i =0;i<Math.floor((val.length-(1+i))/3);i++){
+                        val = val.substring(0,val.length-(4*i+3))+','+val.substring(val.length-(4*i+3));
+                    }
+                    return(((sign)?'':'-')+val+'.'+cents)
+                })
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                num:1000003.1415926
+            }
+        })
+    </script>
+</body>
+</html>

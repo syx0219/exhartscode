@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <p v-for="item in timeList">{{item|times}}</p>
+        </div>
+    </div>
+    <script>
+       Vue.filter('times',(item)=>{
+                    var time = new Date(+item);
+                    function timeAdd(str){
+                        if(str < 10){
+                            str = '0'+str;
+                        }
+                        return str
+                    }
+                    var y = time.getFullYear();
+                    var m = time.getMonth()+1;
+                    var d = time.getDate();
+                    var h = time.getHours();
+                    var mm = time.getMinutes();
+                    var s = time.getSeconds();
+                    return timeAdd(y)+'年'+timeAdd(m)+'月'+timeAdd(d)+'日';
+                })
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                timeList:['1579657789851','1563516693000','1578539380000']
+            }
+        })
+    </script>
+</body>
+</html>

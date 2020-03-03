@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <router-link to="/mymove">电影</router-link>
+        <router-link to="/myyingyuan">影院</router-link>
+        <router-link to="/mymine">我的</router-link>
+        <router-view>     </router-view>
+    </div>
+    <script>
+        var move ={
+            template:'<div>电影</div>'
+        }
+        var yingyuan ={
+            template:'<div>影院</div>'
+        }
+        var mine ={
+            template:'<div>我的</div>'
+        }
+        var routes = [
+            {"path":"/mymove","component":move},
+            {"path":"/myyingyuan","component":yingyuan},
+            {"path":"/mymine","component":mine}
+        ]
+        var router = new VueRouter({
+            routes:routes
+        })
+        //根组件
+        var vm =new Vue({
+            el:"#app",
+            data:{},
+            router:router
+        })
+    </script>
+</body>
+</html>
