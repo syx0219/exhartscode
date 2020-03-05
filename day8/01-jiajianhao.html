@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <script src="../js/swiper.min.js"></script>
+    <link rel="stylesheet" href="../js/swiper.min.css">
+    <style type="text/css">
+        *{
+            padding:0;
+            margin:0;
+        }
+        ul,li{
+            list-style:none;
+        }
+        .top5Con{
+            width: 90%; 
+            height:400px; 
+            background: #004b9e; 
+            border-radius: 10px; 
+            margin: auto;
+            margin-top:20px;
+        }
+        .top5Con h2{
+            color:#fff; 
+            padding:20px;
+        }
+        .top5list{
+            background: #fff; 
+            margin:10px; 
+            height:300px;
+            border-radius: 10px;
+        }
+        .top5list li a{
+            display: flex; 
+            flex-direction: row; 
+            flex-wrap: nowrap; 
+            height:60px;
+            padding:6px ; 
+            border-bottom:1px solid #ddd; 
+        }
+        .top5list li a .top5_img{
+            width:30%;
+        }
+        .top5list li a .top5_img img{
+            width: 80%; 
+            height: 50px;
+        }			
+        .top5list li a .top5_text{
+            width: 70%;
+        }
+        /*轮播图样式*/
+        .swiper-container {
+            width: 100%;
+            height: 200px;
+        }  
+        .swiper-container img{
+            height:200px;
+            width: 100%;
+        }
+        .box{
+            width: 90%;
+            margin: 10px auto;
+        }
+        .box h1{
+            font-weight: normal;
+            font-size: 20px;
+            line-height: 30px;
+        }
+        .box .yue{
+            margin-left:10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <router-link to="/list"></router-link>
+        <router-link to="/item"></router-link>
+        <router-view>
+
+        </router-view>
+        
+    </div>
+    <script type="text/template" id="listT">
+        <div class="top5Con">
+            <h2>本周最受欢迎TOP5</h2>
+            <ul class="top5list">
+                <li v-for="(item,index) in topList">
+                    <router-link :to="'/item/'+item.pro_id">
+                        <div class="top5_img"><img :src="item.pro_img[0].url" /></div>
+                        <div class="top5_text">
+                            <div>{{item.pro_name}}</div>
+                            <div>{{item.pro_Joiner}}人已参加</div>
+                        </div>
+                    </router-link>
+                </li>
+            </ul>
+        </div>
+    </script>
+    <script type="text/template" id="itemT">
+        <div >
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item,index) in swiperArr">
+                        <img :src="item.url" :alt="item.name"/>
+                    </div>	
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+            <div class="box">
+                <h1 v-if="kechengitem.pro_name !== undefined">{{kechengitem.pro_name}}</h1>
+                <span class="yue">{{kechengitem.pro_timestr}}</span>
+            </div>
+        </div>
+    </script>
+    <script> 
+        var mytop = {
+            data:function(){
+                return{
+                    topList:[]
+                }
+            },
+            template:'#listT',
+            mounted:function(){
+                axios.post('https://www.jvhv.com/siteindex.php/Index/Index.html').then((res)=>{
+                    console.log(res);
+                    this.topList = res.data.data.CourseTop5;
+                })
+            }
+        }
+        var myclass = {
+            data:function(){
+                return {
+                    kechengitem:{},
+                    swiperArr:[]
+                }
+            },
+            template:`#itemT`,
+            mounted:function(){
+                console.log(this.$route.params.pro_id);
+                var pid= parseInt(this.$route.params.pro_id);
+                //7.获取数据，将数据保存到变量中
+                let params = new URLSearchParams();//创建新的查询传参对象
+                //接口定义了一些实用的方法来处理 URL 的查询字符串
+                params.append('pro_id',pid);
+                params.append('fid','');
+                axios.post("https://www.jvhv.com/siteindex.php/Lesson/Detail.html",params).then((res)=>{
+                    console.log(res);
+                    this.kechengitem = res.data.data;
+                    console.log(this.kechengitem);
+                    this.swiperArr = res.data.data.pro_imglist;
+                    console.log(this.swiperArr);
+                })
+                
+                //轮播图的初始化操作
+                var mySwiper = new Swiper ('.swiper-container', {
+                    pagination : '.swiper-pagination',
+                    prevButton:'.swiper-button-prev',
+                    nextButton:'.swiper-button-next',
+                    loop: true,
+                    autoplay:2000,
+                    speed:1000,
+                    observer:true,
+                    observeParents:true
+                })        
+            }
+        }
+        var routes=[
+            {"path":"/list","component":mytop},
+            {"path":"/item/:pro_id","component":myclass}
+        ];
+        var router = new VueRouter({
+            routes:routes
+        })
+        var vm = new Vue({
+            el:"#app",
+            router:router
+            
+        })
+    </script>
+</body>
+</html>
