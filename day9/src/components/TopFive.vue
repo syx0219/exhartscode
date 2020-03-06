@@ -4,7 +4,7 @@
         <h2>本周最受欢迎TOP5</h2>
         <ul class="top5list">
             <li v-for="(item,index) in toplist" :key="index">
-                <router-link :to="'/item/'+item.pro_id">
+                <router-link :to="'/myitem/'+item.pro_id">
                     <div class="top5_img"><img :src="item.pro_img[0].url" /></div>
                     <div class="top5_text">
                         <div>{{item.pro_name}}</div>
@@ -20,7 +20,7 @@
 <script>
 export default {
     name:'TopFive',
-    props:['toplist']
+    props:['toplist'],
 }
 </script>
 

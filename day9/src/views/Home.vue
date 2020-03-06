@@ -8,7 +8,7 @@
 		<input type="text" placeholder="输入搜索关键词">
 	  </div>
     </div>
-    <MyBanner :bannerlist="bannerList"></MyBanner>
+    <MyBanner :swiperarr="swiperArr" type="MAIN"></MyBanner>
     <Motion :iconarr="iconArr"></Motion>
 	<Jingxuan :jinglist="jingxuanList"></Jingxuan>
 	<TopFive :toplist="top5Arr"></TopFive>
@@ -26,7 +26,7 @@ export default {
   data:function(){
 			return {
 				top5Arr:[],
-				bannerList:[],
+				swiperArr:[],
 				iconArr:[],
 				jingxuanList:[],
 			}
@@ -43,7 +43,7 @@ export default {
 		axios.post("https://www.jvhv.com/siteindex.php/Index/Index.html").then((res)=>{
 			console.log(res);
 			this.top5Arr = res.data.data.CourseTop5;
-			this.bannerList = res.data.data.top_ad.list;
+			this.swiperArr = res.data.data.top_ad.list;
 			this.iconArr = res.data.data.iconList;
 			this.jingxuanList = res.data.data.CourseforYou;
 		})

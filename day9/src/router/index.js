@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import MySearch from '../views/MySearch.vue'
 import MyMessage from '../views/MyMessage.vue'
 import Mine from '../views/Mine.vue'
+import Myitem from '../views/Myitem.vue'
 
 
 Vue.use(VueRouter)
@@ -31,6 +32,11 @@ const routes = [
     path: '/mine',
     name: 'Mine',
     component: () => import(/* webpackChunkName: "mine" */ '../views/Mine.vue')
+  },
+  {
+    path: '/myitem/:itemid',
+    name: 'Myitem',
+    component: () => import(/* webpackChunkName: "mine" */ '../views/Myitem.vue')
   }
 ]
 

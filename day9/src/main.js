@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import './assets/iconfont/iconfont.css'
-import 'swiper/dist/css/swiper.css'
+// import 'swiper/dist/css/swiper.css'
 
 Vue.config.productionTip = false
 
