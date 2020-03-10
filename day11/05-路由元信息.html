@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+    <div id="appp">
+        <router-link to="/foo">foo</router-link>
+        <router-link to="/center">用户中心</router-link>
+        <router-view></router-view>
+    </div>
+    <script>
+        //组件
+        var foo = {
+            template:`<div>foo页面</div>`,
+            mounted:function(){
+                console.log(this.$route);
+            }
+        }
+        var center = {
+            template:`<div>bar页面</div>`,
+        }
+        var login = {
+            template:`<div>login页面</div>`
+        }
+        //配置路由表
+        var routes = [
+            {"path":"/foo",component:foo,meta:{requireAuth:false,iconType:true}},
+            {"path":"/center",component:center,meta:{requireAuth:true},},
+            {"path":"/login",component:login,meta:{requireAuth:false}}
+        ]
+        //创建路由对象
+        var router = new VueRouter({
+            routes:routes
+        })
+        //全局守卫
+        var loginType = false;//没登录
+        router.beforeEach((to,from,next)=>{
+            console.log(to.meta);
+            //该页面是否需要验证
+            if(to.meta.requireAuth){				
+                if(loginType){
+                    next();
+                }else{
+                    next({path:'/login'});
+                }
+            }else{
+                next();//requireAuth false ，直接放行
+            }
+            
+        })
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            router:router
+        })
+    </script>
+</body>
+</html>

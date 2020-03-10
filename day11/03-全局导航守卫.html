@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+    <div id="appp">
+        <router-link to="/foo">foo</router-link>
+        <router-link to="/bar">bar</router-link>
+        <router-view></router-view>
+    </div>
+    <script>
+        //组件
+        var bar = {
+            template:`<div>bar页面</div>`
+        }
+        var foo = {
+            template:`<div>foo页面</div>`
+        }
+        var login = {
+            template:`<div>login页面</div>`
+        }
+        //配置路由表
+        var routes = [
+            {"path":"/foo",component:foo},
+            {"path":"/bar",component:bar},
+            {"path":"/login",component:login}
+        ]
+        //创建路由对象
+        var router = new VueRouter({
+            routes:routes
+        })
+        var loginType = true;
+        //全局守卫
+        router.beforEach((to,from,next)=>{
+            console.log("从",from,"来");
+            console.log("到",to,"去");
+            console.log("前置守卫被触发了");
+            if(to.path == "/login"){
+                next();
+            }else{
+                if(loginType){
+                    next();
+                }else{
+                    console.log("您还没有登录，请到登录页登录");
+                    next({path:'login'});
+                }
+            }
+        })
+        //路由解析守卫
+        router.beforeResolve((to,from,next)=>{
+            console.log("解析守卫被触发了");
+            next();
+        })
+        //路由后置钩子
+        router.afterEach((to,from)=>{
+            console.log("路由后置钩子被触发了");
+            window.scrollTo(0,0);
+        })
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            router:router
+        })
+    </script>
+</body>
+</html>

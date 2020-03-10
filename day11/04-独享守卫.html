@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+    <div id="appp">
+        <router-link to="/foo">foo</router-link>
+        <router-link to="/bar">bar</router-link>
+        <router-view></router-view>
+    </div>
+    <script>
+        //组件
+        var foo = {
+            template:`<div>foo页面</div>`
+        }
+        var bar = {
+            data:function(){
+                return {
+                    msg:'hello'
+                }
+            },
+            template:`<div>bar页面</div>`,
+            beforeRouteEnter(to,from,next){
+                console.log('组件进入前的路由守卫运行了');
+                console.log(this);
+                //this.msg = 'hi';
+                console.log(this.msg);
+                next((vm)=>{
+                    console.log(vm);
+                    vm.msg = "new value";
+                });
+                //延时器
+                // setTimeout(function(){
+                // 	next((vm)=>{
+                // 		console.log(vm);
+                // 		vm.msg = "new value";
+                // 	});
+                // },1000);
+            },
+            beforeRouteUpdate(to,from,next){
+                console.log('组件路由发生变化时的路由守卫运行了');
+                next();
+            },
+            beforeRouteLeave(to,from,next){
+                console.log('bar组件离开时的路由守卫运行了');
+                next();
+            }
+        }
+        var login = {
+            template:`<div>login页面</div>`
+        }
+        //配置路由表
+        var routes = [
+            {
+                "path":"/foo",
+                component:foo,
+                beforeEnter(to,from,next){
+                    console.log('路由独享守卫运行了');
+                    next();
+                }
+            },
+            {"path":"/bar",component:bar},
+            {"path":"/login",component:login}
+        ]
+        //创建路由对象
+        var router = new VueRouter({
+            routes:routes
+        })
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            router:router
+        })
+    </script>
+</body>
+</html>

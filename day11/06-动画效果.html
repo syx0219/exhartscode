@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <style type="text/css">
+        .fade-enter-active{
+            transition: all 2s;
+        }
+        .fade-leave-active{
+            transition: all 2s;
+        }
+        
+        .fade-enter{
+            opacity: 0;
+        }
+        
+        .fade-leave-to{
+            opacity: 0;
+        }
+        
+        .slide-enter-active{
+            animation: slide-in 1s;
+        }
+        .slide-leave-active{
+            animation:slide-in 1s reverse;
+        }
+        
+        @keyframes slide-in{
+            0%{transform: scale(0);}
+            50%{transform: scale(1.5);}
+            100%{transform: scale(1);}
+        }
+        .box{width: 400px; height: 200px; background: lightblue;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <router-link to="/foo">foo</router-link>
+            <router-link to="/center">用户中心</router-link>
+        </div>
+        <!-- <transition name="fade"> -->
+            <router-view></router-view>
+        <!-- </transition> -->
+    </div>
+    <script type="text/javascript">
+        var foo = {
+            template:`<transition name="slide"><div class="box">foo页面</div></transition>`
+        }
+        var center = {
+            template:`<transition name="fade"><div>用户中心页面</div></transition>`
+        }
+        var login = {
+            template:`<div>登录页面</div>`
+        } 
+        
+        var routes = [
+            {"path":"/foo",component:foo,meta:{requireAuth:false,iconType:true}},
+            {"path":"/center",component:center},
+            {"path":"/login",component:login},
+            
+        ];
+        var router = new  VueRouter({
+            routes:routes
+        })
+        
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            router:router
+        })
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

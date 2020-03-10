@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+    <div id="app">
+        渲染vuex数据：{{count}}
+        <button @click="incrementFun">count加一</button>
+    </div>
+    <script>
+        var store = new Vuex.Store({
+            state:{
+                count:10
+            },
+            mutations:{
+                changeCount(state){
+                    state.count++;
+                }
+            }
+        })
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            computed:{
+                count(){
+                    return this.$store.state.countt;
+                }
+            },
+            methods:{
+                incrementFun:function(){
+                   this.$store.commit('changeCount');
+                }
+            },
+            store:store
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <script src="../js/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+        <div>
+            <router-link to="/foo">foo</router-link>
+            <router-link to="/bar/110">bar-110</router-link>
+            <router-link to="/bar/120">bar-120</router-link>
+        </div>
+        <router-view></router-view>
+        
+    </div>
+    <script type="text/javascript">
+        var foo = {
+            template:`<div>foo页面</div>`
+        }
+        var bar = {
+            data:function(){
+                return {
+                    list:[]
+                }
+            },
+            template:`<div>bar页面--
+                <ul>
+                    <li v-for="(item,index) in list">{{item.title}}</li>
+                </ul>
+            </div>`,
+            beforeRouteEnter(to,from,next){
+                console.log('组件进入前的路由守卫运行了');
+                axios.get('./js/zongyi.json').then(res=>{
+                    console.log(res);
+                    var list = res.data.subject_collection_items;
+                    next(vm=>{
+                        vm.list = list;
+                    });
+                    
+                });
+                
+            },
+            beforeRouteUpdate(to,from,next){
+                console.log('组件路由发生变化时的路由守卫运行了');
+                axios.get('./js/zongyi.json').then(res=>{
+                    console.log(res);
+                    var list = res.data.subject_collection_items;
+                    next(vm=>{
+                        vm.list = list;
+                    });
+                    
+                });
+            },
+            //当组件离开时运行的路由守卫
+            beforeRouteLeave(to,from,next){
+                console.log('bar组件离开时的路由守卫运行了');
+                next();
+            }   
+        }
+
+        var routes = [
+            {"path":"/foo",component:foo},
+            {"path":"/bar/:userid",component:bar}
+        ];
+        var router = new  VueRouter({
+            routes:routes
+        })
+        
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            router:router
+        })
+    </script>
+</body>
+</html>
