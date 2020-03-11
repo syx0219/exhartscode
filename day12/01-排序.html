@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+    <div id="app">
+        获取vuex仓库中的值：
+        显示小于20岁的同学名单：
+        <ul >
+            <li v-for="(item,index) in lessthan20" :key="index">{{item}}</li>
+        </ul>
+        <ul>
+            <li v-for="(item,index) in agetwnty" :key="index">{{item}}</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        var mapGetters = Vuex.mapGetters;
+        var store = new Vuex.Store({
+            state:{
+                stu:[
+                    {"id":1,"name":"刘奇",age:19},
+                    {"id":2,"name":"陈功",age:22},
+                    {"id":3,"name":"黄越",age:18},
+                    {"id":4,"name":"谭明",age:21}
+                    
+                ]
+            },
+            //因为 很多组件里都需要用到该lessthan20的函数，然后我们将它放到 store中
+            getters:{
+                lessthan20:state=>{
+                    return state.stu.filter(item=>item.age<20);
+                },
+                agetwnty:state=>{
+                    return state.stu.sort(function(a,b){
+                            return a.age - b.age;
+                        });
+                }
+            }
+        })
+        /***********创建vue的根节点************/
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            computed:{
+                // lessthan20:function(){
+                // 	//getters是一个属性，调用时是不需要括号的
+                // 	return this.$store.getters.lessthan20;
+                // },
+                //使用 mapGetters获取 store中的getters的值
+                ...mapGetters(['lessthan20','agetwnty'])
+            },
+            store:store, 
+        })
+        
+        //作业：使用 getters对stu的学生按照 年龄进行排序
+    </script> 
+</body>
+</html>

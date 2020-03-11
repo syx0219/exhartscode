@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <script src="../js/vuex.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+        }
+        .nav{
+            height: 50px; 
+            width: 100%; 
+            line-height: 50px; 
+            display: flex;
+            justify-content: space-around;
+            background: lightblue; 
+            color:oranged;
+        }
+        .nav a{
+            text-decoration: none;
+            color:orangered;
+            font-weight: bold;
+        }
+        .list ul li a{
+            display:flex;
+            flex-direction: row; 
+            justify-content: space-around; 
+            flex-wrap: nowrap;
+            margin-top:10px;
+            background:lightgoldenrodyellow; 
+            padding-top:5px;
+            padding-bottom:5px;
+            color:#000;
+        }
+        .list ul li div:nth-of-type(1){
+            width:20%;
+        }
+        .list ul li div:nth-of-type(1) img{ 
+            width:100%;
+        }
+        .list ul li div:nth-of-type(2){
+            width:70%;
+        }
+        .item h3{ 
+            text-align: center; 
+            height:50px; 
+            line-height: 50px; 
+            border-bottom:1px solid #ccc;
+        }
+        .item div img {
+            width: 100%;
+        }
+        .item .add{
+            position: fixed; 
+            bottom:0;
+            left:0;
+            right:0;
+            height:50px; 
+            line-height:50px;
+            text-align: center; 
+            background-color:deeppink; 
+            color:#fff;
+        }
+        .cart ul li{
+            height:100px; 
+            background: lightcyan; 
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="nav">
+            <router-link to="/list">列表</router-link>
+            <router-link to="/cart">购物车</router-link>
+        </div>
+        <router-view></router-view>
+    </div>
+    <script>
+        var {mapState,mapMutations,mapActions,mapGetters} = Vuex;
+        var list = {
+            data:function (){
+                return {
+                    list:[]
+                }
+            },
+            template:`<div class="list">
+                <ul>
+					<li v-for="(item,index) in list">
+						<router-link :to="'/item/'+item.item_id">
+						<div><img :src="item.over_image_url" :alt="item.item_name" /></div>
+						<div>{{item.item_name}}</div>
+						</router-link>
+					</li>
+				</ul>
+            </div>`,
+            mounted:function(){
+                axios.get('./json/list.json').then(res=>{
+                    console.log(res);
+                    this.list = res.data.data.item_list;
+                })
+            }
+        }
+        var item = {
+            data:function (){
+                return {
+                    itemObj:{}
+                }
+            },
+            template:`<div class="item">
+                <h3>{{itemObj.sku_name}}</h3>
+				<div><img :src="itemObj.sku_img_url" /></div>
+                <el-button class="add" :plain="true" @click="ADD_CART_AC(itemObj);openCenter;">添加购物车</el-button>
+            </div>`,
+            mounted:function(){
+                axios.get('./json/item_'+this.$route.params.item_id+'.json').then(res=>{
+                    console.log(res);
+                    this.itemObj = res.data.data.reviews[0];
+                });
+            },
+            methods:{
+                ADD_CART_AC:function(item){
+                    item.num = 1;
+                    item.item_id = this.$route.params.item_id;
+                    //派发到action
+                    this.$store.dispatch("ADD_CART_AC",item);
+                },
+                openCenter() {
+                    this.$message({
+                    message: '已添加到购物车中',
+                    center: true
+                    });
+                }
+            }
+        }
+        var cart = {
+            data:function (){
+                return {
+                    type:false
+                }
+            },
+            template:`<div class="cart">
+                <h3>购物车</h3>
+				<template v-if="type">
+					<ul>
+						<li v-for="(item,index) in goods">
+                        {{item.sku_name}} ,数量：{{item.num}} 
+                        </li>
+					</ul>
+				</template>
+				<template v-else>
+					<router-link to="/list"><button>去首页逛逛</button></router-link>
+				</template>
+            </div>`,
+            computed:{
+                ...mapState(['goods'])
+            },
+            mounted:function(){
+                console.log(this.goods);
+                if(this.goods.length > 0){
+                    this.type = true;
+                }
+            }
+        }
+        var store = new Vuex.Store({
+            state:{
+                goods:[]
+            },
+            getters:{
+
+            },
+            mutations:{
+                //添加购物车
+                ADD_CART:function(state,payload){
+                    state.goods.push(payload);
+                },
+                //修改购物车中商品的数量
+                UPDATE_CART:function(state,payload){
+                    state.goods = payload;
+                }
+            },
+            actions:{
+                ADD_CART_AC:function(context,item){
+                    //添加商品到 goods
+                    var type = true;//true表示该商品是第一次添加；false 表示该商品不是第一次添加
+                    //循环查找该商品的id号
+                    var newArr = [...this.state.goods];
+                    console.log(newArr);
+                    console.log(item);
+                    for(var i = 0;i<newArr.length;i++){
+                        if(newArr[i].item_id == item.item_id){//在购物车中找到了该商品
+                            //将 购物车中的该商品数量加一
+                            newArr[i].num++;
+                            context.commit('UPDATE_CART',newArr);
+                            //修改type的状态值
+                            type = false;
+                            break;
+                        }
+                    }
+                    console.log(item);
+                    if(type){
+                        context.commit('ADD_CART',item);
+                    }
+                }
+            }
+        })
+        var routes = [
+            {"path":'/list',component:list},
+            {"path":'/item/:item_id',component:item},
+            {"path":'/cart',component:cart},
+        ]
+        var router = new VueRouter({
+            routes:routes
+        })
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            router,
+            store
+        })
+    </script>
+</body>
+</html>
