@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--引入react的解析包 -->
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <!--引入react解析到 dom节点的包-->
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <!--babel :解析es6语法  jsx语法-->
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+    <style>
+        .mytable tr,.mytable td{
+            border:1px solid #000000;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        //数组
+        var dataName =["学号","姓名","性别","籍贯","联系方式"];
+        var message=[{id:"1",name:"坤坤",sex:"男",home:"湖南",phone:"130233"},
+            {id:"2",name:"弄弄",sex:"女",home:"台湾",phone:"130233"},
+            {id:"3",name:"成成",sex:"男",home:"青岛",phone:"130233"},
+            {id:"4",name:"豪豪",sex:"男",home:"温州",phone:"130233"},
+            {id:"5",name:"君君",sex:"女",home:"广州",phone:"130233"
+            }]
+        //创建子组件
+        var MyElement = React.createClass({
+            render(){
+                console.log(this.props);
+                return (
+                    <div>
+                        <h2>学生列表</h2>
+                        <table className="mytable">
+                            <thead>
+                                <tr>
+                                    {
+                                        this.props.nameArr.map(function(item){
+                                            return <td>{item}</td>
+                                        })
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.props.messageArr.map(function(item){
+                                        return <tr><td>{item.id}</td><td>{item.name}</td><td>{item.sex}</td><td>{item.home}</td><td>{item.phone}</td></tr>
+                                    })
+                                }      
+                            </tbody>
+                        </table>
+                    </div>
+                )
+            }
+        })
+        
+        ReactDOM.render(
+        <MyElement nameArr = {dataName} messageArr = {message}></MyElement>,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
