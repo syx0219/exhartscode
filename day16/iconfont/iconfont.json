@@ -1,0 +1,37 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "554208",
+      "name": "砖石",
+      "font_class": "iconset0219",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "853075",
+      "name": "钥匙",
+      "font_class": "yaochi",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "5155932",
+      "name": "咖啡",
+      "font_class": "kafei",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "6346009",
+      "name": "vip",
+      "font_class": "vip",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    }
+  ]
+}

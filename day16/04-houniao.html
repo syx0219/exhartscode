@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<!--引入react的解析包 -->
+		<script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+		<!--引入react解析到 dom节点的包-->
+		<script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+		<!--babel :解析es6语法  jsx语法-->
+		<script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+        <script src="../js/axios.min.js"></script>
+        <link rel="stylesheet" href="iconfont/iconfont.css">
+        <link rel="stylesheet" href="icon/iconfont.css">
+        <link rel="stylesheet" href="../js/swiper.min.css">
+        <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        .paren{
+            width: 100%;
+            /* height: 1000vh; */
+            background: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+        }
+        .warp{
+            width: 100%;
+            flex: 1;
+        }
+        .warp .header{
+            width: 100%;
+            height: 187px;
+            position: relative;
+        }
+        .swiper-wrapper{
+            width: 100%;
+            height: 187px;
+        }
+        .swiper-slide img{
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            border: none;
+        }
+        .swiper-pagination{
+            z-index: 900;
+        }
+        .search{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            padding: 10px;
+            background:rgba(242,242,242,.95) url("../img/icon_list.png") no-repeat -96px -239px;
+            position: fixed;
+            left: 15px;
+            top: 15px;
+            z-index: 10;
+        }
+        .nav ul{
+            width: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+        }
+        .nav ul li{
+            width: 50px;
+            padding: 15px;
+        }
+        .nav ul li .iconfont{
+            font-size: 30px;
+            color: orange;
+        }
+        .nav ul li dt{
+            color: orange;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .main{
+            width: 100%;
+            margin-top: 10px;
+            background: #ffffff;
+        }
+        .tuijian{
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #cccccc;
+            font-size: 20px;
+            text-align: center;
+            line-height: 50px;
+            color: #cccccc;
+        }
+        .tuijian span{
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: url("../img/icon_list.png") no-repeat -50px -50px;
+        }
+        .main .list{
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            padding: 10px;
+            border-bottom:1px dashed #b9b9b9;
+        }
+        .list .pic{
+            width: 40%;
+            position: relative;
+        }
+        .list .pic img{
+            display: inline-block;
+            width: 146px;
+            height: 78px;
+            border: none;
+        }
+        .list .pic i{
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            bottom: 5px;
+            right: 29px;
+            color: #ffffff;
+        }
+        .list .pic span{
+            position: absolute;
+            bottom: 13px;
+            right: 10px;
+            color: #ffffff;
+            font-size: 12px;
+        }
+        .msg{
+            width: 60%;
+            margin:0 10px;
+        }
+        .list .msg .text{
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .ress{
+            display: inline-block;
+            background: #e9e9e9;
+            border-radius: 4px;
+            color: #484848;
+            font-size: 12px;
+            padding: 3px;
+        }
+        .timemoney{
+            display: flex;
+            font-size: 13px;
+            color: #cccccc;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+        .zhaomu{
+            width: 100%;
+            margin-top: 10px;
+            background: #ffffff;
+            padding: 10px 0px 25px 0px;
+        }
+        .zhaomu .title{
+            width: 90%;
+            margin: 5px auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .zhaomu .title .right{
+            margin: auto 0;
+        }
+        .zhaomu .title .right span{
+            font: 20px;
+            font-weight: bolder;
+        }
+        .zhaobanner{
+            width: 90%;
+            margin: 10px auto;
+            border: 1px solid red;
+        }
+        .zhaobanner ul{
+            display: flex;
+            flex-direction: row;
+            height: 250px;
+        }
+        .zhaobanner ul li{
+            margin: 0px 10px;
+        }
+        .zhaobanner ul li img{
+            height: 178px;
+        }
+        .zhaobanner ul li .zhaomu_title{
+            font-size: 12px;
+        }
+        .zhaobanner ul li .zhaomu_title .zhaomu_country{
+            display: inline-block;
+            background: #e9e9e9;
+            border-radius: 4px;
+            color: #484848;
+            padding: 3px;
+        }
+        .zhaomu .care{
+            font-size: 12px;
+        }
+        .zhaomu .care em{
+            font-style: normal;
+        }
+        .youlike{
+            width: 100%;
+            margin: 10px 0;
+            background: #ffffff;
+        }
+        .youlike .like_con{
+            width: 90%;
+            margin: 10px auto;
+            flex-basis: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex-flow: row wrap;
+        }
+        .youlike .like_item{
+            width: 47%;
+            box-shadow: 0.4rem 0.4rem 0 #f2f2f2;
+            border: 1px solid #f2f2f2;
+            margin: 0.35rem 0;
+        }
+        .youlike .like_item .like_img{
+            height: 80px;
+            position: relative;
+        }
+        .youlike .like_item .like_img img{
+            height: 100%;
+        }
+        .like_item .like_img i{
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            bottom: -1px;
+            right: 30px;
+            color: #ffffff;
+        }
+        .like_item .like_img span{
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+            color: #ffffff;
+            font-size: 12px;
+        }
+        .like_item h2{
+            text-align: right;
+            font-size: 12px !important;
+            padding: 0.066rem 0;
+            font-weight: normal;
+        }
+        .footer{
+            width: 100%;
+            height: 50px;
+            background: #ffffff;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            /* padding: 10px 0; */
+        }
+        .footer ul{
+            display: flex;
+            justify-content: space-around;
+        }
+        .footer li dl dt{
+            font-size: 20px;
+        }
+        .footer li dl dd{
+            width: 30px;
+            height: 30px;
+        }
+        .footer li dl .first{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+        }
+        .footer li dl .find{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -30px -34px;
+        }
+        .footer li dl .dingzhi{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -63px 0px;
+        }
+        .footer li dl .mudi{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -90px -34px;
+        }
+        .footer li dl .mine{
+            background: url("../img/bottom_nav_icon.png") no-repeat;
+            background-size: 9.9375rem;
+            background-position: -125px -34px;
+        }
+        </style>
+	</head>
+	<body>
+        <script src="../js/swiper.min.js"></script>
+        <div id="app"></div>
+        <script type="text/babel">
+        //猜你喜欢子组件
+        var Likezi = React.createClass({
+            render(){
+                const item = this.props.item;
+                return (
+                    <div className="like_item">
+                        <div className="like_img">
+                            <img src={item.proPicUrl}/>
+                            <i className="iconfont icon-aixin"></i>               
+                            <span>{item.collectionNum}</span>
+                        </div>
+                        <h2>{item.proTitle}</h2>
+                        <div className="ress">
+                            <i className="iconfont icon-icon--"></i>
+                            <span>{item.country}</span>
+                        </div>
+                        <div className="timemoney">    
+                            <p>
+                                <i className="iconfont icon-shijian"></i>
+                                <span>{item.routing_data}天{item.routing_nigth}晚</span>
+                            </p>
+                            <p>
+                                <i className="iconfont icon-jinqian"></i>
+                                <span>{item.amount}元起</span>
+                            </p>
+                        </div>
+                    </div>
+                )
+            }
+        })
+        //猜你喜欢
+        var Youlike = React.createClass({
+            render(){
+                console.log(this.props.youlike);
+                const youlike = this.props.youlike;
+                return (
+                    <div className="youlike">
+                        <p className="tuijian">猜你喜欢<span></span></p>
+                        <div className="like_con">
+                            {
+                                youlike.map((item)=><Likezi item={item}></Likezi>)
+                            }
+                        </div>
+                    </div>
+                )
+            }
+        })
+        //招募轮播图
+        var Zhaomubanner = React.createClass({
+            render(){
+                const item = this.props.item;
+                return (
+                    <li>
+                        <img src={item.pro_pic_url}/>
+                        <div className="zhaomu_title">
+                            <span>{item.pro_title}</span>
+                            <div className="zhaomu_country">
+                                <i className="iconfont icon-icon--"></i>
+                                <span>{item.country}</span>
+                            </div>
+                        </div>
+                        <div className="timemoney">    
+                            <p>
+                                <i className="iconfont icon-shijian"></i>
+                                <span>{item.routing_data}天{item.routing_nigth}晚</span>
+                            </p>
+                            <p>
+                                <i className="iconfont icon-jinqian"></i>
+                                <span>{item.amount}元起</span>
+                            </p>
+                        </div>
+                    </li>
+                )
+            }
+        })
+        //招募头部
+        var Zhaomuhead = React.createClass({
+            render(){
+                return (
+                    <div className="title">
+                        <div className="title_text">
+                            <h1>招募活动</h1>
+                            <p>旅途中，邂逅TA，邂逅世界的美</p>
+                        </div>
+                    </div>
+                )
+            }
+        })
+        //招募活动组件
+        var Myzhaomu = React.createClass({
+            render(){
+                console.log(this.props.zhaomu);
+                const zhaomu = this.props.zhaomu;
+                return (
+                    <div className="zhaomu">
+                        <Zhaomuhead />
+                        <div className="zhaobanner swiper-container">
+                        <ul className="swiper-wrapper">
+                        {
+                            zhaomu.map((item)=><Zhaomubanner item={item}/>)
+                        }
+                        </ul>
+                    </div>
+                    <div className="care">
+                        <span>
+                            <i className="iconfont icon-duihaocheckmark17"></i>  
+                            <em>不用懂外语</em>                      
+                        </span>
+                        <span>
+                            <i className="iconfont icon-duihaocheckmark17"></i>  
+                            <em>不用懂攻略</em>                      
+                        </span>
+                        <span>
+                            <i className="iconfont icon-duihaocheckmark17"></i>  
+                            <em>没有购物坑</em>                      
+                        </span>
+                        <span>
+                            <i className="iconfont icon-duihaocheckmark17"></i>  
+                            <em>不用折腾自己</em>                      
+                        </span>
+                    </div>
+                    </div>
+                )
+            }
+        })
+        //导航
+        var MyNav = React.createClass({
+            render(){
+                return (
+                    <div className="nav">
+                    <ul>
+                        <li>
+                            <dl>
+                                <dd><i className="iconfont icon-kafei"></i></dd>
+                                <dt>省心</dt>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dd><i className="iconfont icon-iconset0219"></i></dd>
+                                <dt>品质</dt>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dd><i className="iconfont icon-yaochi"></i></dd>
+                                <dt>私密</dt>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dd><i className="iconfont icon-vip"></i></dd>
+                                <dt>专享</dt>
+                            </dl>
+                        </li>
+                    </ul>
+                </div>
+                )
+            }
+        })
+        //推荐子组件
+        var Item = React.createClass({
+            render(){
+                // console.log(this.props.item);
+                const item = this.props.item;
+                return (
+                    <li className="list">
+                        <div className="pic">
+                            <img src={item.proPicUrl}/>
+                            <i className="iconfont icon-aixin"></i>               
+                            <span>{item.collectionNum}</span>
+                        </div>
+                        <div className="msg">
+                            <p className="text">{item.proTitle}</p>
+                            <div className="ress">
+                                <i className="iconfont icon-icon--"></i>
+                                <span className="address">{item.country}</span>
+                            </div>
+                            <div className="timemoney">
+                                <p>
+                                    <i className="iconfont icon-shijian"></i>
+                                    <span>{item.routingDat}天{item.routingNigth}晚</span>
+                                </p>
+                                <p>
+                                    <i className="iconfont icon-jinqian"></i>
+                                    <span>{item.amount}元起</span>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                )
+            }
+        })
+        //推荐组件
+        var MyElement = React.createClass({
+            render(){
+                console.log(this.props.recom);
+                const recom = this.props.recom;
+                return (
+                    <div className="main">
+                        <p className="tuijian">推荐<span></span></p>
+                        <ul>
+                            {
+                                recom.map((item)=><Item item={item}/>)
+                            }
+                        </ul>
+                    </div>
+                )
+            }
+        })
+        //轮播组件
+        var Mylunbo = React.createClass({
+            render(){
+                const lunbo = this.props.lunbo;
+                console.log(this.props.lunbo);
+                return (
+                    <div className="header">
+                        <div className="swiper-container">
+                            <div className="swiper-wrapper">
+                                {
+                                    lunbo.map(function(item){
+                                        return <div className="swiper-slide"><img src={item.photoUrl} /></div>
+                                    })
+                                }
+                            </div>
+                            <div className="swiper-pagination"></div>
+                        </div>
+                        <div className="search"></div>
+                    </div>
+                )
+            },
+            componentDidMount(){
+                var mySwiper = new Swiper('.swiper-container',{
+                    pagination : '.swiper-pagination',
+                    autoplay : true,
+                    loop : true
+                })
+            },
+        })
+        //页脚组件
+        var Myfooter = React.createClass({
+            render(){
+                return (
+                    <div className="footer">
+                        <ul>
+                            <li>
+                                <dl>
+                                    <dd className="first"></dd>
+                                    <dt>首页</dt>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dd className="find"></dd>
+                                    <dt>发现</dt>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dd className="dingzhi"></dd>
+                                    <dt>定制行</dt>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dd className="mudi"></dd>
+                                    <dt>目的地</dt>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dd className="mine"></dd>
+                                    <dt>我的</dt>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                )
+            }
+        })
+        //创建父组件
+        class Parent extends React.Component{
+            constructor(){
+                super();
+                this.state = {
+                    list:[],
+                    lunboList:[],
+                    zhaomuList:[],
+                    likeList:[]
+                }
+            }
+            componentDidMount(){
+                //获取推荐的数据 post
+                axios.post("http://www.51houniao.com/product/product/getProductRecommendUser",{
+                    desc:false,
+                    orderBy:"top",
+                    pageNow:1,
+                    pageSize:20,
+                    seller_user_id:"4bc4027c645343f09a964b5c2e9f875b"
+                }).then((res)=>{
+                    console.log(res);
+                    this.setState({
+                        list:res.data
+                    })
+                })
+                //获取轮播数据
+                axios.get("http://www.51houniao.com/product/banner/getBySeller/4bc4027c645343f09a964b5c2e9f875b").then((res)=>{
+                    console.log(res); 
+                    this.setState({
+                        lunboList:res.data
+                    })
+                })
+                //获取猜你喜欢的数据 get
+                axios.get("http://www.51houniao.com/product/product/guessYouLike").then((res)=>{
+                    console.log(res); 
+                    this.setState({
+                        likeList:res.data
+                    })
+                })
+
+                //获取招募活动数据 post
+                axios.post("http://www.51houniao.com/requirement/request/getMatchedProducts",{
+                    desc: false,
+                    orderBy: "outtime",
+                    pageSize: 100,
+                    product_type: 2
+                }).then((res)=>{
+                    console.log(res);
+                    this.setState({
+                        zhaomuList:res.data.matchedProducts
+                    })
+                })
+                
+            }
+            render(){
+                return (
+                    <div className="paren">
+                        <div className="warp">
+                            <Mylunbo lunbo={this.state.lunboList}></Mylunbo>
+                            <MyNav/>
+                            <MyElement recom={this.state.list}></MyElement>
+                            <Myzhaomu zhaomu={this.state.zhaomuList}></Myzhaomu>
+                            <Youlike youlike={this.state.likeList}></Youlike>
+                        </div>
+                        <Myfooter/>
+                        
+                    </div>
+                )
+            }
+        }	
+			//渲染
+			ReactDOM.render(<Parent />,document.getElementById('app'));
+				
+		</script>
+	</body>
+</html>

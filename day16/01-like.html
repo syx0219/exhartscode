@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--引入react的解析包 -->
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <!--引入react解析到 dom节点的包-->
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <!--babel :解析es6语法  jsx语法-->
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        var LikeButton = React.createClass({
+            //对state设置初始状态值
+            getInitialState(){
+                return {like:true}
+            },
+            //状态改变的函数
+            changeLikeType(){
+                console.log('函数被触发了');
+                this.setState({
+                    like:!this.state.like
+                })
+            },
+            render(){
+                return(<div>
+                    <button onClick={this.changeLikeType}>我是不是喜欢你，点击按钮试一下吧！</button>
+                    我  {this.state.like?'喜欢':'不喜欢'}      你
+                </div>)
+            }
+        })
+        //渲染
+        ReactDOM.render(<LikeButton/>,document.getElementById('app'))
+    </script>
+</body>
+</html>
