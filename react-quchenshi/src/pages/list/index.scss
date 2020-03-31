@@ -1,0 +1,31 @@
+.list-con{
+	h3{
+		height:50px;
+		line-height: 50px;
+		border-bottom:1px solid #ccc;
+		font-size:20px;
+		padding-left:5%;
+		position: fixed;
+		top:0;
+		left:0;
+		right:0;
+		background-color: #fff;
+		.list-title{
+			padding-left:35%;
+		}
+	}
+	ul{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+		li{
+			width: 45%;
+			img{width:100%}
+		} 
+	}
+	.end{
+		font-size: 16px; 
+		color:orangered;
+		text-align: center;
+	}
+}
